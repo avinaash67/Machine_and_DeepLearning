@@ -3,7 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import linear_model
 
-df = pd.read_csv("../data/homeprices.csv")
+# Collecting data from csv
+df = pd.read_csv("data/homeprices.csv")  # Path from root
 
 plt.xlabel('area(sqrft)')
 plt.ylabel('price(US$)')
