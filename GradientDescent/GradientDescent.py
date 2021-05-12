@@ -14,8 +14,14 @@ def gradient_descent(x, y):
         y_predicted = m_curr * x + b_curr
         cost = (1/n) * sum([ val**2 for val in (y-y_predicted)])
 
-        md = -(2/n) * sum(x * (y-y_predicted))
-        bd = -(2/n) * sum(y-y_predicted)
+        # Important ----- Derivative is calculated for the loss function used;
+        # We use partial derivatives to find how each individual parameter affects MSE,
+        # so that's where word partial comes from. We take these derivatives with respect to m and b separately.
+        # Here MSE loss function is used; Hence derivative for the MSE loss function is calculated below
+
+        md = -(2/n) * sum(x * (y-y_predicted))      # Derivative with respect to m
+        bd = -(2/n) * sum(y-y_predicted)            # Derivative with respect to b
+
         m_curr = m_curr - learning_rate * md
         b_curr = b_curr - learning_rate * bd
 
