@@ -55,7 +55,7 @@ def gradient_descent(age, affordability, y_true, epochs):
 # ------------------------------------------------------------------------------------------------------
 
 # Obtaining data
-df = pd.read_csv("../data/insurance.csv")
+df = pd.read_csv("../../data/insurance.csv")
 
 # Splitting data into train and test dataset
 X_train, X_test, Y_train, Y_test = train_test_split(df[['age', 'affordibility']], df[['bought_insurance']],

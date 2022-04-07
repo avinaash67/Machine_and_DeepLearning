@@ -5,7 +5,7 @@ import numpy
 import matplotlib.pyplot as plt
 
 # Collecting data from csv
-df = pd.read_csv("../data/Admission_Predict.csv")
+df = pd.read_csv("../../data/Admission_Predict.csv")
 
 # X-Axis data (Independent variable)
 X = df[["GRE Score", "TOEFL Score"]]
