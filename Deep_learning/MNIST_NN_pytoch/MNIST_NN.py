@@ -1,5 +1,4 @@
 import torch
-import torchvision
 from torchvision.datasets import MNIST
 from torchvision import transforms
 import matplotlib.pyplot as plt
@@ -7,7 +6,6 @@ import numpy as np
 from torch.utils.data.sampler import SubsetRandomSampler
 from torch.utils.data.dataloader import DataLoader
 import matplotlib.pyplot as plt
-import matplotlib
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -105,7 +103,7 @@ class MnistModel(nn.Module):
 #     break  # Break iteration after one batch is processed
 
 
-# GPU or CPU ------------------------------------------------------------
+# GPU or CPU 
 def get_default_device():
     """Pick GPU if available, else CPU"""
     if torch.cuda.is_available():

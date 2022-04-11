@@ -32,7 +32,7 @@ for iteration in range(20000):
 
     output_layer = sigmoid(np.dot(input_layer, synaptic_weights))  # This is yhat (predicted output)
 
-    error = training_outputs - output_layer
+    error = training_outputs -  output_layer
 
     adjustments = error * sigmoid_derivative(output_layer)
 

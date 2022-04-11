@@ -32,9 +32,7 @@ class Autoencoder(nn.Module):
         )
 
     def forward(self, x):
-        """
-        
-        """
+        """Feed forward neural network function"""
         encoded = self.encoder(x)
         decoded = self.decoder(encoded)
         return decoded
