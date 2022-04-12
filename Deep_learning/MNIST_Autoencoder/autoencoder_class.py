@@ -9,6 +9,11 @@ class Autoencoder(nn.Module):
     def __init__(self):
         super().__init__()
         self.encoder=nn.Sequential(
+            # Note: "nn. Linear(input layer size, output layer size)" 
+            # creates the weight and bias matrices for that specific layer.
+            # i.e. y = mx + b. Where, m = weight matrix; b= bias matrix
+            # Weight matrix shape = input layer size x output layer size
+            # Bias matrix shape = input layer size x 1
             nn.Linear(28*28,128),  # N,784 -> N,128
             nn.ReLU(), 
             nn.Linear(128,64),   # N,128 -> N,64
