@@ -30,13 +30,13 @@ def loss_batch(model, criterion, xb, yb, optimizer=None, metric=None):
     """
     # reshape mini-batch data to [N, 784] matrix
     # load it to the active device
-    img_flat=xb.view(-1, 784)
-    preds = model.forward(img_flat.to('cuda'))
+    imgs_actual_flat=xb.view(-1, 784).to(device)
+    imgs_recon_flat = model.forward(imgs_actual_flat)
     # Note: criterion can be of various types. (e.g. cross_entropy, mse, etc)
     # Loss is computed between the predicted image and the actual image
     # This is because, the autoencoder encodes the image to latent space and
     # The image is once again decoded(or redrawn) from the latent space
-    loss = criterion(preds, img_flat.to('cuda'))  
+    loss = criterion(imgs_recon_flat, imgs_actual_flat)  
 
     if optimizer is not None:
         # Compute gradients
@@ -48,10 +48,10 @@ def loss_batch(model, criterion, xb, yb, optimizer=None, metric=None):
 
     metric_result = None
     if metric is not None:
-        metric_result = metric(preds, yb)
+        metric_result = metric(imgs_recon_flat, yb)
 
     # .item() converts tensor to floating point number
-    return loss.item(), len(xb), metric_result
+    return loss.item(),imgs_actual_flat,imgs_recon_flat, metric_result
 
 def fit(epochs, model, criterion, optimizer, train_dl, test_dl, metric):
     """ Trains the model 
@@ -65,16 +65,18 @@ def fit(epochs, model, criterion, optimizer, train_dl, test_dl, metric):
     Returns: 
 
     """
+    outputs = []
     for epoch in range(epochs):
         for xb, yb in train_dl:
-            # Moving to GPU
-            xb.to('cuda')
-            yb.to('cuda')
             # Training by batches
-            loss, _, _ = loss_batch(model=model,
+            loss,imgs_actual_flat,imgs_recon_flat,_= loss_batch(model=model,
                                     criterion=criterion,
                                     xb=xb,
                                     yb=yb,
                                     optimizer=optimizer,
                                     metric=metric)
-        print(f'Epoch:{epoch+1},Loss:{loss:.4f}')
+        print("xb.shape = ",xb.shape)
+        print("yb.shape = ",yb.shape)
+        print(f'Epoch:{epoch+1},Loss:{loss:.4f} \n')
+        outputs.append((epoch,imgs_actual_flat,imgs_recon_flat))
+    return outputs
