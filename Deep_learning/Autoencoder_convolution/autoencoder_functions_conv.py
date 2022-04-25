@@ -31,7 +31,7 @@ def loss_batch(model, criterion, xb, yb, optimizer=None, metric=None):
     # reshape mini-batch data to [N, 784] matrix
     # load it to the active device
     # imgs_actual_flat=xb.view(-1, 784).to(device)
-    imgs_actual_flat=xb
+    imgs_actual_flat=xb.to(device)
     imgs_recon_flat = model.forward(imgs_actual_flat)
     # Note: criterion can be of various types. (e.g. cross_entropy, mse, etc)
     # ----- important ------
