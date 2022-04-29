@@ -16,29 +16,29 @@ def accuracy(outputs, labels):
     _, preds = torch.max(outputs, dim=1)
     return torch.sum(preds == labels).item() / len(preds)
 
-def loss_batch(model, criterion, xb, yb, optimizer=None, metric=None):
+def loss_batch(model, criterion, imgs, labels, optimizer=None, metric=None):
     """Calculate loss for a batch of data
     optionally perform the gradient descent update step if an optimizer is provided.
     optionally computes a metric (e.g. accuracy) using the predictions and actual targets
     Parameters
     Args:
         model: nn model
-        xb: batch of image tensor 
-        yb: corresponding labels of the batch
+        imgs: batch of image tensor 
+        labels: corresponding labels of the batch
         opt: optimizer
         metric: evaluation metric
     """
     # reshape mini-batch data to [N, 784] matrix
     # load it to the active device
-    # imgs_actual_flat=xb.view(-1, 784).to(device)
-    imgs_actual_flat=xb.to(device)
-    imgs_recon_flat = model.forward(imgs_actual_flat)
+    # imgs_actual=imgs.view(-1, 784).to(device)
+    imgs_actual=imgs.to(device)
+    imgs_recon = model.forward(imgs_actual)
     # Note: criterion can be of various types. (e.g. cross_entropy, mse, etc)
     # ----- important ------
     # Loss is computed between the predicted image and the actual image
     # This is because, the autoencoder encodes the image to latent space and
     # The image is once again decoded(or redrawn) from the latent space
-    loss = criterion(imgs_recon_flat, imgs_actual_flat)   
+    loss = criterion(imgs_recon, imgs_actual)   
 
     if optimizer is not None:
         # Compute gradients
@@ -50,18 +50,18 @@ def loss_batch(model, criterion, xb, yb, optimizer=None, metric=None):
 
     metric_result = None
     if metric is not None:
-        metric_result = metric(imgs_recon_flat, yb)
+        metric_result = metric(imgs_recon, labels)
 
     # .item() converts tensor to floating point numbser
-    return loss.item(),imgs_actual_flat,imgs_recon_flat, metric_result
+    return loss.item(),imgs_actual,imgs_recon, metric_result
 
 def fit(epochs, model, criterion, optimizer, train_dl, test_dl, metric):
     """ Trains the model 
     Args:
         epochs: number of epochs for traing
         model: nn model
-        xb: train input batch
-        yb: corresponding labels of the train batc
+        imgs: train input batch
+        labels: corresponding labels of the train batc
         opt: optimizer
         metric: evaluation metric
     Returns: 
@@ -69,16 +69,16 @@ def fit(epochs, model, criterion, optimizer, train_dl, test_dl, metric):
     """
     outputs = []
     for epoch in range(epochs):
-        for xb, yb in train_dl:
+        for imgs, labels in train_dl:
             # Training by batches
-            loss,imgs_actual_flat,imgs_recon_flat,_= loss_batch(model=model,
+            loss,imgs_actual,imgs_recon,_= loss_batch(model=model,
                                     criterion=criterion,
-                                    xb=xb,
-                                    yb=yb,
+                                    imgs=imgs,
+                                    labels=labels,
                                     optimizer=optimizer,
                                     metric=metric)
-        # print("xb.shape = ",xb.shape)
-        # print("yb.shape = ",yb.shape)
+        # print("imgs.shape = ",imgs.shape)
+        # print("labels.shape = ",labels.shape)
         print(f'Epoch:{epoch+1},Loss:{loss:.4f}')
-        outputs.append((epoch,imgs_actual_flat,imgs_recon_flat))
+        outputs.append((epoch,imgs_actual,imgs_recon))
     return outputs

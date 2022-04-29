@@ -14,7 +14,8 @@ An autoencoder is a type of neural network that finds the function mapping the f
 2. A decoder learns to reconstruct the original data based on the learned representation by the encoder. 
 (ref: https://afagarap.github.io/2020/01/26/implementing-autoencoder-in-pytorch.html)
 
-
-
 Tutorial: 
     https://www.youtube.com/watch?v=zp8clK9yCro&ab_channel=PythonEngineer
+
+Another example of pytorch-Autoencoder implementation blog:
+    https://afagarap.github.io/2020/01/26/implementing-autoencoder-in-pytorch.html
